@@ -79,7 +79,7 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int):
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
 fun angleInRadian(deg: Int, min: Int, sec: Int):
-        Double = (deg + min / 60.0 + sec / 3600.0 ) / 180.0 * PI
+        Double = (deg + min / 60.0 + sec / 3600.0) / 180.0 * PI
 
 /**
  * Тривиальная
@@ -97,7 +97,7 @@ fun trackLength(x1: Double, y1: Double, x2: Double, y2: Double):
  * Определить третью цифру справа в этом числе (в данном случае 8).
  */
 fun thirdDigit(number: Int):
-        Int = (number / 100 ) % 10
+        Int = (number / 100) % 10
 
 /**
  * Простая
@@ -118,10 +118,10 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  */
 fun accountInThreeYears(initial: Int, percent: Int): Double {
     val per = percent / 100.0
-    val A = initial + initial * per
-    val B = A + A * per
-    val C = B + B * per
-    return C
+    val a = initial + initial * per
+    val b = a + a * per
+    val c = b + b * per
+    return c
 }
 
 /**
@@ -131,8 +131,8 @@ fun accountInThreeYears(initial: Int, percent: Int): Double {
  * Необходимо вывести число, полученное из заданного перестановкой цифр в обратном порядке (например, 874).
  */
 fun numberRevert(number: Int): Int {
-    val A = number % 10 * 100
-    val B = number % 100 / 10 * 10
-    val C = number / 100
-    return A + B + C
+    val a = number % 10 * 100
+    val b = number % 100 / 10 * 10
+    val c = number / 100
+    return a + b + c
 }
