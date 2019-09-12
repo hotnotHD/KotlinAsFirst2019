@@ -120,8 +120,7 @@ fun accountInThreeYears(initial: Int, percent: Int): Double {
     val per = percent / 100.0
     val a = initial + initial * per
     val b = a + a * per
-    val c = b + b * per
-    return c
+    return b + b * per
 }
 
 /**
