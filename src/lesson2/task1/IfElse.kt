@@ -3,8 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
-import kotlin.math.max
-import kotlin.math.sqrt
+import kotlin.math.*
 
 /**
  * Пример
@@ -103,7 +102,18 @@ fun whichRookThreatens(
     kingX: Int, kingY: Int,
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
-): Int = TODO()
+): Int {
+    var rook1 = 0
+    var rook2 = 0
+    if (kingX == rookX1 || kingY == rookY1) rook1++
+    if (kingX == rookX2 || kingY == rookY2) rook2++
+    return when {
+        rook1 == 1 && rook2 == 1 -> 3
+        rook1 == 1 -> 1
+        rook2 == 1 -> 2
+        else -> 0
+    }
+}
 
 /**
  * Простая
@@ -119,7 +129,18 @@ fun rookOrBishopThreatens(
     kingX: Int, kingY: Int,
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
-): Int = TODO()
+): Int {
+    var rook = 0
+    var bishop = 0
+    if (abs(kingX - bishopX) == abs(kingY - bishopY)) bishop++
+    if (kingX == rookX || kingY == rookY) rook++
+    return when {
+        rook == 1 && bishop == 1 -> 3
+        rook == 1 -> 1
+        bishop == 1 -> 2
+        else -> 0
+    }
+}
 
 /**
  * Простая
@@ -129,7 +150,16 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    val cosAC = (a * a + c * c - b * b) / 2.0 * a * c
+    val cosAB = (a * a + b * b - c * c) / 2.0 * a * b
+    val cosBC = (c * c + b * b - a * a) / 2.0 * c * b
+    if (a + b > c && a + c > b && b + c > a) {
+        if (cosAB == 0.0 || cosAC == 0.0 || cosBC == 0.0) return 1
+        return if (min(min(cosAB, cosAC), min(cosAB, cosBC)) < 0) 2
+        else 0
+    } else return -1
+}
 
 /**
  * Средняя
