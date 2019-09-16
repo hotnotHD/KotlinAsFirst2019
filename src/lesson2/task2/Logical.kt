@@ -61,7 +61,7 @@ fun daysInMonth(month: Int, year: Int): Int {
         12 -> a = 31
     }
     if (year % 400 == 0 && month == 2) return a + 1
-    if (year % 4 == 0 && year % 100 != 0) return a + 1
+    if (year % 4 == 0 && year % 100 != 0 && month == 2) return a + 1
     return a
 }
 
