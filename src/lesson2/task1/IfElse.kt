@@ -64,8 +64,8 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String {
     val a = age % 10
-    if (age != 11 && age != 111 && a == 1) return "$age год"
-    return if (age != 12 && age != 13 && age != 14 && age != 112 && age != 113 && age != 114 && (a == 2 || a == 3 || a == 4)) "$age года"
+    return if (age != 11 && age != 111 && a == 1) "$age год"
+    else if (age !in 12..14 && age !in 112..114 && a in 2..4) "$age года"
     else "$age лет"
 }
 
@@ -84,9 +84,11 @@ fun timeForHalfWay(
     val s = (t1 * v1 + t2 * v2 + t3 * v3) / 2
     val s1 = t1 * v1
     val s2 = t2 * v2
-    if (s < s1) return s / v1
-    return if (s < s1 + s2) t1 + (s - s1) / v2
-    else t1 + t2 + (s - s1 - s2) / v3
+    return when {
+        s < s1 -> s / v1
+        (s < s1 + s2) -> t1 + (s - s1) / v2
+        else -> t1 + t2 + (s - s1 - s2) / v3
+    }
 }
 
 /**
@@ -103,14 +105,12 @@ fun whichRookThreatens(
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
 ): Int {
-    var rook1 = 0
-    var rook2 = 0
-    if (kingX == rookX1 || kingY == rookY1) rook1++
-    if (kingX == rookX2 || kingY == rookY2) rook2++
+    val rook1: Boolean = kingX == rookX1 || kingY == rookY1
+    val rook2: Boolean = kingX == rookX2 || kingY == rookY2
     return when {
-        rook1 == 1 && rook2 == 1 -> 3
-        rook1 == 1 -> 1
-        rook2 == 1 -> 2
+        rook1 && rook2 -> 3
+        rook1 -> 1
+        rook2 -> 2
         else -> 0
     }
 }
@@ -130,14 +130,12 @@ fun rookOrBishopThreatens(
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
 ): Int {
-    var rook = 0
-    var bishop = 0
-    if (abs(kingX - bishopX) == abs(kingY - bishopY)) bishop++
-    if (kingX == rookX || kingY == rookY) rook++
+    val rook = kingX == rookX || kingY == rookY
+    val bishop = abs(kingX - bishopX) == abs(kingY - bishopY)
     return when {
-        rook == 1 && bishop == 1 -> 3
-        rook == 1 -> 1
-        bishop == 1 -> 2
+        rook && bishop -> 3
+        rook -> 1
+        bishop -> 2
         else -> 0
     }
 }
@@ -154,9 +152,9 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val cosAC = (a * a + c * c - b * b) / 2.0 * a * c
     val cosAB = (a * a + b * b - c * c) / 2.0 * a * b
     val cosBC = (c * c + b * b - a * a) / 2.0 * c * b
-    if (a + b > c && a + c > b && b + c > a) {
-        if (cosAB == 0.0 || cosAC == 0.0 || cosBC == 0.0) return 1
-        return if (min(min(cosAB, cosAC), min(cosAB, cosBC)) < 0) 2
+    return if (a + b > c && a + c > b && b + c > a) {
+        if (cosAB == 0.0 || cosAC == 0.0 || cosBC == 0.0) 1
+        else if (minOf(cosAB, cosAC, cosBC) < 0) 2
         else 0
     } else return -1
 }

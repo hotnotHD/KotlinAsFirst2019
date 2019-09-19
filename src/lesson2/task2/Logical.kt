@@ -32,11 +32,8 @@ fun isNumberHappy(number: Int): Boolean {
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    if (abs(x1 - x2) == abs(y1 - y2) || (x1 == x2 || y1 == y2)) return true
-    return false
-}
-
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
+    (abs(x1 - x2) == abs(y1 - y2) || (x1 == x2 || y1 == y2))
 
 /**
  * Простая
@@ -45,24 +42,23 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int {
-    var a = 0
-    when (month) {
-        1 -> a = 31
-        2 -> a = 28
-        3 -> a = 31
-        4 -> a = 30
-        5 -> a = 31
-        6 -> a = 30
-        7 -> a = 31
-        8 -> a = 31
-        9 -> a = 30
-        10 -> a = 31
-        11 -> a = 30
-        12 -> a = 31
+    val a = when (month) {
+        1 -> 31
+        2 -> 28
+        3 -> 31
+        4 -> 30
+        5 -> 31
+        6 -> 30
+        7 -> 31
+        8 -> 31
+        9 -> 30
+        10 -> 31
+        11 -> 30
+        else -> 31
     }
-    if (year % 400 == 0 && month == 2) return a + 1
-    if (year % 4 == 0 && year % 100 != 0 && month == 2) return a + 1
-    return a
+    return if (year % 400 == 0 && month == 2) a + 1
+    else if (year % 4 == 0 && year % 100 != 0 && month == 2) a + 1
+    else a
 }
 
 /**
@@ -91,17 +87,7 @@ fun circleInside(
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    val min: Int
-    val mid: Int
-    if (a == min(a, b) && a == min(a, c)) {
-        min = a
-        mid = min(c, b)
-    } else if (b == min(a, b) && b == min(b, c)) {
-        min = b
-        mid = min(c, a)
-    } else {
-        min = c
-        mid = min(b, a)
-    }
+    val min = minOf(a, b, c)
+    val mid = a + b + c - maxOf(a, b, c) - min
     return (min <= min(r, s) && mid <= max(r, s))
 }
