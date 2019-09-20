@@ -105,8 +105,8 @@ fun whichRookThreatens(
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
 ): Int {
-    val rook1: Boolean = kingX == rookX1 || kingY == rookY1
-    val rook2: Boolean = kingX == rookX2 || kingY == rookY2
+    val rook1 = kingX == rookX1 || kingY == rookY1
+    val rook2 = kingX == rookX2 || kingY == rookY2
     return when {
         rook1 && rook2 -> 3
         rook1 -> 1
@@ -167,8 +167,8 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    return if (c in a..b) when (d) {
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int =
+    if (c in a..b) when (d) {
         in a..b -> d - c
         else -> b - c
     }
@@ -179,4 +179,3 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
         }
         else -1
     }
-}
