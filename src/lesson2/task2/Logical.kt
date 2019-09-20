@@ -73,7 +73,7 @@ fun circleInside(
     x2: Double, y2: Double, r2: Double
 ): Boolean {
     val r = r2 - r1
-    val s = sqrt((x2 - x1).pow(2) + (y2 - y1).pow(2))
+    val s = sqrt((x2 - x1).pow(2.0) + (y2 - y1).pow(2.0))
     return s <= r
 }
 
