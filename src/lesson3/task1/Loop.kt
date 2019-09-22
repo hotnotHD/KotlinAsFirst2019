@@ -4,6 +4,18 @@ package lesson3.task1
 
 import kotlin.math.*
 
+fun nod(n: Int, m: Int): Int {
+    var a = max(n, m)
+    var b = min(n, m)
+    var t: Int
+    while (a % b != 0) {
+        t = b
+        b = a % b
+        a = t
+    }
+    return b
+}
+
 /**
  * Пример
  *
@@ -92,33 +104,37 @@ fun fib(n: Int): Int =
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int {
-    var a = max(n, m)
-    var b = min(n, m)
-    var t: Int
-    if (a % b == 0) return a
-    else
-        while (a % b != 0) {
-            t = b
-            b = a % b
-            a = t
-        }
-    return n / b * m
-}
+fun lcm(m: Int, n: Int): Int = n / nod(m, n) * m
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int {
+    var i = 2
+    while (i <= n / 2)
+        if (n % i == 0)
+            break
+        else i++
+    return if (i - 1 == n / 2) n
+    else i
+}
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = TODO()
+fun maxDivisor(n: Int): Int {
+    var i = n / 2
+    while (i < n)
+        if (n % i == 0)
+            break
+        else i--
+    return if (i - 1 == n / 2) n
+    else i
+}
 
 /**
  * Простая
@@ -127,7 +143,7 @@ fun maxDivisor(n: Int): Int = TODO()
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = TODO()
+fun isCoPrime(m: Int, n: Int): Boolean = nod(m, n) == 1
 
 /**
  * Простая
@@ -217,7 +233,18 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var i = 0
+    var a = 0
+    while (n > a) {
+        i++
+        a += digitNumber(i * i)
+    }
+    i *= i
+    return if (a == n) i % 10
+    else
+        (i / (10.0.pow(a - n)) % 10).toInt()
+}
 
 /**
  * Сложная
@@ -228,4 +255,15 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var i = 0
+    var a = 0
+    while (n > a) {
+        i++
+        a += digitNumber(fib(i))
+    }
+    i = fib(i)
+    return if (a == n) i % 10
+    else
+        (i / (10.0.pow(a - n)) % 10).toInt()
+}
