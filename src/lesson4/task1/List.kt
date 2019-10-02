@@ -3,7 +3,6 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
-import ru.spbstu.ktuples.Tuple0.size
 import kotlin.math.sqrt
 
 /**
