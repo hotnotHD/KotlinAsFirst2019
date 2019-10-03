@@ -2,6 +2,7 @@
 
 package lesson4.task1
 
+import kotlinx.html.A
 import lesson1.task1.discriminant
 import kotlin.math.sqrt
 
@@ -135,7 +136,11 @@ fun mean(list: List<Double>): Double {
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = TODO()
+fun center(list: MutableList<Double>): MutableList<Double> {
+    val k = list.sum() / list.size
+    list.replaceAll { it - k }
+    return list
+}
 
 /**
  * Средняя
@@ -144,7 +149,13 @@ fun center(list: MutableList<Double>): MutableList<Double> = TODO()
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int = TODO()
+fun times(a: List<Int>, b: List<Int>): Int {
+    if (a.isEmpty()) return 0
+    val mutableListA: MutableList<Int>
+    for (i in 0..a.size)
+        mutableListA[i] = a[i] * b[i]
+    return A.sum()
+}
 
 /**
  * Средняя
