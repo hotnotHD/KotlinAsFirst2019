@@ -170,8 +170,11 @@ fun times(a: List<Int>, b: List<Int>): Int {
  */
 fun polynom(p: List<Int>, x: Int): Int {
     var px = 0.0
-    for (i in 0 until p.size)
-        px += p[i] * x.toDouble().pow(i)
+    var k = 1
+    for (i in 0 until p.size) {
+        px += p[i] * k
+        k *= x
+    }
     return px.toInt()
 }
 
@@ -231,7 +234,7 @@ fun convert(n: Int, base: Int): List<Int> {
     if (n < base) return listOf(n)
     var i = n
     val l = mutableListOf<Int>()
-    while (i > base) {
+    while (i >= base) {
         l += i % base
         i /= base
     }

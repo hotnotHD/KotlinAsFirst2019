@@ -141,6 +141,7 @@ class Tests {
         assertEquals(13, polynom(listOf(3, 2), 5))
         assertEquals(0, polynom(listOf(2, -3, 1), 1))
         assertEquals(45, polynom(listOf(-7, 6, 4, -4, 1), -2))
+        assertEquals(-1247348296, polynom(listOf(-1000, -1000, -1000, -1000, -1000, -1000), -20))
     }
 
     @Test
@@ -188,6 +189,7 @@ class Tests {
         assertEquals(listOf(1, 3, 12), convert(250, 14))
         assertEquals(listOf(2, 14, 12), convert(1000, 19))
         assertEquals(listOf(1, 3, 12), convert(250, 14))
+        assertEquals(listOf(1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 1), convert(45779, 2))
     }
 
     @Test
@@ -199,6 +201,7 @@ class Tests {
         assertEquals("2ec", convertToString(1000, 19))
         assertEquals("z", convertToString(35, 36))
         assertEquals("a02220281", convertToString(Int.MAX_VALUE, 11))
+        assertEquals("1000010111010000", convertToString(34256, 2))
     }
 
     @Test
