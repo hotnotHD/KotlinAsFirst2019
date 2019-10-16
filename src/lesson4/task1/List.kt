@@ -124,10 +124,10 @@ fun abs(v: List<Double>): Double = sqrt(v.sumByDouble { it * it })
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double {
-    return if (list.isEmpty()) 0.0
+fun mean(list: List<Double>): Double =
+    if (list.isEmpty()) 0.0
     else list.sumByDouble { it } / list.size
-}
+
 
 /**
  * Средняя
@@ -138,7 +138,7 @@ fun mean(list: List<Double>): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    val k = list.sum() / list.size
+    val k = mean(list)
     list.replaceAll { it - k }
     return list
 }
@@ -151,13 +151,10 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
 fun times(a: List<Int>, b: List<Int>): Int {
-    return if (a.isEmpty()) 0
-    else {
-        val ab = mutableListOf<Int>()
-        for (i in 0 until a.size)
-            ab += a[i] * b[i]
-        ab.sum()
-    }
+    var ab = 0
+    for (i in 0 until a.size)
+        ab += a[i] * b[i]
+    return ab
 }
 
 /**
@@ -201,8 +198,8 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> {
-    return if (isPrime(n)) listOf(n)
+fun factorize(n: Int): List<Int> =
+    if (isPrime(n)) listOf(n)
     else {
         var i = n
         val ls = mutableListOf<Int>()
@@ -212,7 +209,6 @@ fun factorize(n: Int): List<Int> {
         }
         ls + i
     }
-}
 
 /**
  * Сложная
@@ -257,7 +253,7 @@ fun convertToString(n: Int, base: Int): String {
     val l = convert(n, base).toMutableList()
     val ch = mutableListOf<Char>()
     val letter = 'a' - 10
-    val num = '1' - 1
+    val num = '0'
     for (i in 0 until l.size) {
         ch += if (l[i] > 9) {
             (l[i] + letter.toInt()).toChar()
