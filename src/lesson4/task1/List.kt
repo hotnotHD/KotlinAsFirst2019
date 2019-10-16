@@ -128,7 +128,6 @@ fun mean(list: List<Double>): Double =
     if (list.isEmpty()) 0.0
     else list.sumByDouble { it } / list.size
 
-
 /**
  * Средняя
  *
@@ -271,7 +270,13 @@ fun convertToString(n: Int, base: Int): String {
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var sum = 0.0
+    for (i in digits.size - 1 downTo 0) {
+        sum += digits[digits.size - i - 1] * base.toDouble().pow(i)
+    }
+    return sum.toInt()
+}
 
 /**
  * Сложная
@@ -285,7 +290,17 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    val letter = 'a' - 10
+    val num = '0'
+    val dig = mutableListOf<Int>()
+    for (i in 0 until str.length)
+        dig += if (str[i] < letter)
+            ((str[i] - num) * base.toDouble().pow(str.length - i - 1)).toInt()
+        else
+            ((str[i] - letter) * base.toDouble().pow(str.length - i - 1)).toInt()
+    return dig.sum()
+}
 
 /**
  * Сложная
@@ -295,7 +310,58 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val romNum = mapOf(
+        1 to "I",
+        4 to "IV",
+        5 to "V",
+        9 to "IX",
+        10 to "X",
+        40 to "XL",
+        50 to "L",
+        90 to "XC",
+        100 to "C",
+        400 to "CD",
+        500 to "D",
+        900 to "CM",
+        1000 to "M"
+    )
+    var fin = String()
+    var num = n
+    var a: Int
+    var i = 1
+    while (num >= 10) {
+        num /= 10
+        i *= 10
+    }
+    num = n
+    while (i > 0) {
+        a = (num / i) % 10
+        if (i >= 1000 && a >= 4) {
+            repeat(a) {
+                fin += romNum[1 * i]
+            }
+            i /= 10
+        } else {
+            if (a == 1 || a == 4 || a == 5 || a == 9) fin += romNum[a * i]
+            else {
+                if (a < 5)
+                    repeat(a) {
+                        fin += romNum[1 * i]
+                    }
+                else {
+                    fin += romNum[5 * i]
+                    repeat(a - 5) {
+                        fin += romNum[1 * i]
+                    }
+                }
+
+            }
+            i /= 10
+        }
+    }
+    return fin
+}
 
 /**
  * Очень сложная

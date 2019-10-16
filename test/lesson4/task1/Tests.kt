@@ -211,6 +211,7 @@ class Tests {
         assertEquals(100, decimal(listOf(1, 2, 1, 0), 4))
         assertEquals(250, decimal(listOf(1, 3, 12), 14))
         assertEquals(1000, decimal(listOf(2, 14, 12), 19))
+        assertEquals(0, decimal(listOf(0, 0, 0), 19))
     }
 
     @Test
@@ -232,6 +233,7 @@ class Tests {
         assertEquals("MCMLXXVIII", roman(1978))
         assertEquals("DCXCIV", roman(694))
         assertEquals("XLIX", roman(49))
+        assertEquals("MMMMMCCIII", roman(5203))
     }
 
     @Test
