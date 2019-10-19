@@ -3,6 +3,7 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.digitNumber
 import lesson3.task1.isPrime
 import lesson3.task1.minDivisor
 import kotlin.math.*
@@ -330,35 +331,31 @@ fun roman(n: Int): String {
     var num = n
     var a: Int
     var i = 1
+    if (num >= 1000) {
+        repeat(num / 1000) {
+            fin += romNum[1000]
+        }
+        num %= 1000
+    }
     while (num >= 10) {
         num /= 10
         i *= 10
     }
-    num = n
     while (i > 0) {
-        a = (num / i) % 10
-        if (i >= 1000 && a >= 4) {
-            repeat(a) {
+        a = n % 1000 / i % 10
+        when (a) {
+            1, 4, 5, 9 -> fin += romNum[a * i]
+            2, 3 -> repeat(a) {
                 fin += romNum[1 * i]
             }
-            i /= 10
-        } else {
-            if (a == 1 || a == 4 || a == 5 || a == 9) fin += romNum[a * i]
-            else {
-                if (a < 5)
-                    repeat(a) {
-                        fin += romNum[1 * i]
-                    }
-                else {
-                    fin += romNum[5 * i]
-                    repeat(a - 5) {
-                        fin += romNum[1 * i]
-                    }
+            6, 7, 8 -> {
+                fin += romNum[5 * i]
+                repeat(a - 5) {
+                    fin += romNum[1 * i]
                 }
-
             }
-            i /= 10
         }
+        i /= 10
     }
     return fin
 }
@@ -370,4 +367,74 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val first = n / 1000
+    val second = n % 1000
+    val ft = first % 10
+    val fin = mutableListOf<String>()
+    if (first != 0) {
+        if (first !in 1..4)
+            fin.add(numInString(first, false))
+        if (ft in 1..5 && first % 100 !in 10..19) {
+            fin.add(thousand[ft - 1])
+        } else fin.add(thousand[4])
+    }
+    if (second != 0)
+        fin.add(numInString(second, true))
+    return fin.joinToString(separator = " ")
+}
+
+fun numInString(n: Int, part: Boolean): String {
+    val res = mutableListOf<String>()
+    val k = listNum(n)
+    k.reverse()
+    for (i in 0 until k.size) {
+        if (k[i] != 0) {
+            when (i) {
+                0 -> {
+                    if (k[i] < 10 && (k[i] !in 1..4 || part)) res.add(units[k[i]])
+                    if (k[i] >= 10) res.add(ten[k[i] % 10 + 1])
+                }
+                1 -> res.add(tens[k[i]])
+                2 -> res.add(hundreds[k[i]])
+            }
+        }
+    }
+    res.reverse()
+    return res.joinToString(separator = " ")
+}
+
+fun listNum(n: Int): MutableList<Int> {
+    val ls = mutableListOf<Int>()
+    var a = n
+    var b = n % 10
+    val c = n % 100
+    if (c in 10..19) {
+        ls.add(c)
+        ls.add(0)
+        ls.add(a / 100)
+    } else {
+        repeat(digitNumber(n)) {
+            ls.add(b)
+            a /= 10
+            b = a % 10
+        }
+    }
+    ls.reverse()
+    return ls
+}
+
+val units = listOf<String>("", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+val ten = listOf<String>(
+    "", "десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать",
+    "семнадцать", "восемнадцать", "девятнадцать"
+)
+val tens = listOf<String>(
+    "", "", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят",
+    "девяносто"
+)
+val hundreds = listOf<String>(
+    "", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот",
+    "семьсот", "восемьсот", "девятьсот"
+)
+val thousand = listOf<String>("одна тысяча", "две тысячи", "три тысячи", "четыре тысячи", "тысяч")
