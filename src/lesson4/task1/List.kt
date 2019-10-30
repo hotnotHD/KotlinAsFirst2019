@@ -6,6 +6,7 @@ import lesson1.task1.discriminant
 import lesson3.task1.digitNumber
 import lesson3.task1.isPrime
 import lesson3.task1.minDivisor
+import java.lang.Double.sum
 import kotlin.math.*
 
 /**
@@ -127,7 +128,7 @@ fun abs(v: List<Double>): Double = sqrt(v.sumByDouble { it * it })
  */
 fun mean(list: List<Double>): Double =
     if (list.isEmpty()) 0.0
-    else list.sumByDouble { it } / list.size
+    else list.sum() / list.size
 
 /**
  * Средняя
@@ -201,13 +202,18 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
 fun factorize(n: Int): List<Int> =
     if (isPrime(n)) listOf(n)
     else {
-        var i = n
+        var j = n
+        var i = 2
         val ls = mutableListOf<Int>()
-        while (!isPrime(i)) {
-            ls += minDivisor(i)
-            i /= minDivisor(i)
+        while (j > 1) {
+            if (j % i == 0) {
+                j /= i
+                ls += i
+                i = 1
+            }
+            i += 1
         }
-        ls + i
+        ls
     }
 
 /**
@@ -272,11 +278,13 @@ fun convertToString(n: Int, base: Int): String {
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
 fun decimal(digits: List<Int>, base: Int): Int {
-    var sum = 0.0
+    var sum = 0
+    var j = 1
     for (i in digits.size - 1 downTo 0) {
-        sum += digits[digits.size - i - 1] * base.toDouble().pow(i)
+        sum += digits[i] * j
+        j *= base
     }
-    return sum.toInt()
+    return sum
 }
 
 /**
@@ -294,13 +302,16 @@ fun decimal(digits: List<Int>, base: Int): Int {
 fun decimalFromString(str: String, base: Int): Int {
     val letter = 'a' - 10
     val num = '0'
-    val dig = mutableListOf<Int>()
-    for (i in 0 until str.length)
+    var dig = 0
+    var j = base.toDouble().pow(str.length - 1)
+    for (i in 0 until str.length) {
         dig += if (str[i] < letter)
-            ((str[i] - num) * base.toDouble().pow(str.length - i - 1)).toInt()
+            ((str[i] - num) * j).toInt()
         else
-            ((str[i] - letter) * base.toDouble().pow(str.length - i - 1)).toInt()
-    return dig.sum()
+            ((str[i] - letter) * j).toInt()
+        j /= base
+    }
+    return dig
 }
 
 /**
@@ -424,17 +435,17 @@ fun listNum(n: Int): MutableList<Int> {
     return ls
 }
 
-val units = listOf<String>("", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
-val ten = listOf<String>(
+val units = listOf("", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+val ten = listOf(
     "", "десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать",
     "семнадцать", "восемнадцать", "девятнадцать"
 )
-val tens = listOf<String>(
+val tens = listOf(
     "", "", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят",
     "девяносто"
 )
-val hundreds = listOf<String>(
+val hundreds = listOf(
     "", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот",
     "семьсот", "восемьсот", "девятьсот"
 )
-val thousand = listOf<String>("одна тысяча", "две тысячи", "три тысячи", "четыре тысячи", "тысяч")
+val thousand = listOf("одна тысяча", "две тысячи", "три тысячи", "четыре тысячи", "тысяч")

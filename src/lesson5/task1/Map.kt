@@ -92,7 +92,7 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> =
-    grades.map { (k, v) -> Pair(v, k) }.groupBy({ it.first }, { it.second })
+    grades.entries.groupBy({ it.value }, { it.key })
 
 /**
  * Простая
@@ -168,7 +168,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> =
-    stockPrices.groupBy({ it.first }, { it.second }).map { (k, v) -> Pair(k, v.average()) }.toMap()
+    stockPrices.groupBy({ it.first }, { it.second }).mapValues { it.value.average() }
 
 /**
  * Средняя
