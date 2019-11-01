@@ -301,43 +301,11 @@ class Tests {
     fun findSumOfTwo() {
         assertEquals(
             Pair(-1, -1),
-            findSumOfTwo(listOf(0), 1)
-        )
-        assertEquals(
-            Pair(-1, -1),
-            findSumOfTwo(listOf(1, 1), 0)
-        )
-        assertEquals(
-            Pair(-1, -1),
-            findSumOfTwo(listOf(0, 0), 1)
-        )
-        assertEquals(
-            Pair(0, 1),
-            findSumOfTwo(listOf(0, 1), 1)
-        )
-        assertEquals(
-            Pair(-1, -1),
-            findSumOfTwo(listOf(1, 2, 3, 4), 8)
-        )
-        assertEquals(
-            Pair(13, 14),
-            findSumOfTwo(listOf(1, 2, 3, 4, 6, 34, 54, 754, 734, 643, 2, 5, 125, 1000, 1001), 2001)
-        )
-        assertEquals(
-            Pair(0, 4),
-            findSumOfTwo(listOf(1, 3, 4, 5, 7), 8)
-        )
-        assertEquals(
-            Pair(1, 4),
-            findSumOfTwo(listOf(1, 4, 2, 3, 4), 8)
+            findSumOfTwo(emptyList(), 1)
         )
         assertEquals(
             Pair(0, 2),
             findSumOfTwo(listOf(1, 2, 3), 4)
-        )
-        assertEquals(
-            Pair(-1, -1),
-            findSumOfTwo(emptyList(), 1)
         )
         assertEquals(
             Pair(-1, -1),
