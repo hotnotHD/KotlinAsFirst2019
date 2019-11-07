@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import kotlin.math.max
+
 /**
  * Пример
  *
@@ -200,8 +202,11 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean =
-    chars.map { it.toLowerCase() }.toSet().intersect(word.toLowerCase().toSet()).size == word.map { it.toLowerCase() }.toSet().size
+fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+    val ch = chars.map { it.toLowerCase() }.toSet()
+    val wd = word.toLowerCase().toSet()
+    return ch.intersect(wd).size == wd.size
+}
 
 /**
  * Средняя
@@ -215,11 +220,8 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean =
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> {
-    val rep = mutableMapOf<String, Int>()
-    list.groupBy { it }.forEach { (k, v) -> if (v.count() >= 2) rep[k] = v.count() }
-    return rep
-}
+fun extractRepeats(list: List<String>): Map<String, Int> =
+    list.groupBy { it }.map { it.key to it.value.size }.toMap().filter { it.value >= 2 }
 
 /**
  * Средняя
@@ -230,11 +232,8 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean {
-    var b = false
-    words.groupBy { it.toLowerCase().toSortedSet() }.forEach { (_, v) -> if (v.count() >= 2) b = true }
-    return b
-}
+fun hasAnagrams(words: List<String>): Boolean =
+    words.groupBy { it.toLowerCase().toSortedSet() }.any { (_, v) -> v.count() >= 2 }
 
 /**
  * Сложная
@@ -281,14 +280,12 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): String = TODO()
  */
 
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    val revert = list.sortedDescending()
-    for (i in 0 until list.size) {
-        for (j in list.size - 1 downTo 0) {
-            if (number - revert[i] == revert[j] && i != j)
-                return Pair(list.indexOf(revert[j]), list.lastIndexOf(revert[i]))
-        }
-    }
-    return Pair(-1, -1)
+    if (list.isEmpty()) return Pair(-1, -1)
+    val revert = list.sortedDescending().drop(1)
+    val b = list.max()
+    val c = revert.indexOf(number - b!!)
+    if (c == -1) return Pair(-1, -1)
+    return Pair(list.indexOf(revert[c]), list.lastIndexOf(b))
 }
 
 /**

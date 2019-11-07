@@ -199,22 +199,22 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> =
-    if (isPrime(n)) listOf(n)
-    else {
-        var j = n
-        var i = 2
-        val ls = mutableListOf<Int>()
-        while (j > 1) {
-            if (j % i == 0) {
-                j /= i
-                ls += i
-                i = 1
-            }
-            i += 1
+fun factorize(n: Int): List<Int> {
+    if (isPrime(n)) return listOf(n)
+    var j = n
+    var i = 2
+    val ls = mutableListOf<Int>()
+    while (j > i) {
+        if (j % i == 0) {
+            j /= i
+            ls += i
+            i--
         }
-        ls
+        i++
     }
+    ls += i
+    return ls
+}
 
 /**
  * Сложная
