@@ -2,6 +2,9 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+import java.io.File.separator
+
 /**
  * Пример
  *
@@ -57,6 +60,20 @@ fun main() {
     }
 }
 
+val monthStr = mapOf(
+    "января" to "01",
+    "февраля" to "02",
+    "марта" to "03",
+    "апреля" to "04",
+    "мая" to "05",
+    "июня" to "06",
+    "июля" to "07",
+    "августа" to "08",
+    "сентября" to "09",
+    "октября" to "10",
+    "ноября" to "11",
+    "декабря" to "12"
+)
 
 /**
  * Средняя
@@ -69,7 +86,23 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val fin = mutableListOf<String>()
+    val parts = str.split(" ")
+    if (parts.size != 3) return String()
+    for (i in 0 until parts.size) {
+        fin += when {
+            i == 1 -> monthStr[parts[i]] ?: return String()
+            (parts[i].toInt() in 0..9) -> "0${parts[i]}"
+            (i == 0 && parts[0].toInt() > 31) || daysInMonth(
+                monthStr[parts[1]]!!.toInt(),
+                parts[2].toInt()
+            ) < parts[0].toInt() -> return String()
+            else -> parts[i]
+        }
+    }
+    return fin.joinToString(separator = ".")
+}
 
 /**
  * Средняя
@@ -97,7 +130,11 @@ fun dateDigitToStr(digital: String): String = TODO()
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    val reg = Regex("""\s|[-()]""").replace(phone, "")
+    if (reg.contains(Regex("""[^0-9+]""")) || phone.contains(Regex("""\(\)"""))) return String()
+    return reg
+}
 
 /**
  * Средняя
