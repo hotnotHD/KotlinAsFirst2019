@@ -93,7 +93,7 @@ fun dateStrToDigit(str: String): String {
     for (i in 0 until parts.size) {
         fin += when {
             i == 1 -> monthStr[parts[i]] ?: return String()
-            (parts[i].toInt() in 0..9) -> "0${parts[i]}"
+            (parts[i].toInt() in 0..9) && i != 2 -> "0${parts[i].toInt()}"
             (i == 0 && parts[0].toInt() > 31) || daysInMonth(
                 monthStr[parts[1]]!!.toInt(),
                 parts[2].toInt()
