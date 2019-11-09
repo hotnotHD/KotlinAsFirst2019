@@ -89,6 +89,7 @@ val monthStr = mapOf(
 fun dateStrToDigit(str: String): String {
     val fin = mutableListOf<String>()
     val parts = str.split(" ")
+    if (!str.matches(Regex("""\d+\s[а-я]+\s\w+"""))) String()
     if (parts.size != 3) return String()
     for (i in 0 until parts.size) {
         fin += when {
