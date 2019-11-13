@@ -3,7 +3,6 @@
 package lesson6.task1
 
 import lesson2.task2.daysInMonth
-import java.io.File.separator
 
 /**
  * Пример
@@ -147,7 +146,10 @@ fun flattenPhoneNumber(phone: String): String {
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int =
+    if (!jumps.matches(Regex("""((\d+|%|-)\s+)*(\d+|%|-)""")) || !jumps.contains(Regex("""[0-9]"""))) -1
+    else jumps.split(Regex("""\s|%|-\s""")).toSortedSet().last().toInt()
+
 
 /**
  * Сложная
@@ -160,7 +162,15 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    if (!jumps.matches(Regex("""(([0-9]+)\s+[+%-]+|\s+)+""")) || !jumps.contains(Regex("""\+""")))
+        return -1
+    val res = Regex("""([0-9]+)\s((%)+\+|\+)""").findAll(jumps).toList().map { it.value }
+    val res2 = mutableListOf<Int>()
+    for (i in res)
+        res2 += Regex("""\s[+%]+""").replace(i, "").toInt()
+    return res2.max()!!
+}
 
 /**
  * Сложная
@@ -171,7 +181,19 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    if (expression.matches(Regex("""[0-9]+"""))) return expression.toInt()
+    if (!expression.matches(Regex("""([0-9]+)(\s[+|-]\s[0-9]+)+"""))) throw IllegalArgumentException(expression)
+    val num = Regex("""([0-9]+)|[+|-]\s[0-9]+""").findAll(expression).toList().map { it.value }
+    var res = 0
+    for (i in num) {
+        if (i.contains("-"))
+            res -= Regex("""-\s""").replace(i, "").toInt()
+        else
+            res += Regex("""\+\s""").replace(i, "").toInt()
+    }
+    return res
+}
 
 /**
  * Сложная
