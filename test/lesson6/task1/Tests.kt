@@ -139,6 +139,7 @@ class Tests {
     @Test
     @Tag("Impossible")
     fun computeDeviceCells() {
+        assertEquals(listOf(0), computeDeviceCells(1, "[[]]", 500))
         assertEquals(listOf(0), computeDeviceCells(1, "[+++][[++]]", 500))
         assertEquals(listOf(376), computeDeviceCells(1, "[]++++[+++]", 501))
         assertThrows(IllegalArgumentException::class.java) { computeDeviceCells(1, "+ +-+-]-", 500) }

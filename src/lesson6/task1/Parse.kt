@@ -297,6 +297,7 @@ fun fromRoman(roman: String): Int {
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (commands.contains(Regex("""[^+\-><\[\] ]"""))) throw IllegalArgumentException(commands)
+    val dlina = commands.length
     var comCount = 0
     var i = 0
     var sensor = cells / 2
@@ -306,8 +307,8 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (commands.isEmpty()) return line
 
     fun nextBkt() {
-        var num = 1
-        for (j in 0 until commands.length) {
+        var num = dlina
+        for (j in 0 until dlina) {
             when (commands[j]) {
                 '[' -> {
                     bkt += num to j
@@ -315,13 +316,13 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                 }
                 ']' -> {
                     num--
-                    if (num < 1) throw IllegalArgumentException(commands)
+                    if (num < dlina) throw IllegalArgumentException(commands)
                     bkt += bkt[num]!! to j
                     bkt += j to bkt[num]!!
                 }
             }
         }
-        if (num != 1) throw IllegalArgumentException(commands)
+        if (num != dlina) throw IllegalArgumentException(commands)
     }
 
     fun move(com: Char) {
@@ -341,7 +342,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     while (i < limit) {
         move(commands[comCount])
         if (sensor !in 0 until cells) throw IllegalStateException(commands)
-        if (comCount > commands.length - 1) break
+        if (comCount > dlina - 1) break
     }
     return line
 }
