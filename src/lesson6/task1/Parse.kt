@@ -306,7 +306,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (commands.isEmpty()) return line
 
     fun nextBkt() {
-        var num = -1
+        var num = 1
         for (j in 0 until commands.length) {
             when (commands[j]) {
                 '[' -> {
@@ -315,13 +315,13 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                 }
                 ']' -> {
                     num--
-                    if (num < -1) throw IllegalArgumentException(commands)
+                    if (num < 1) throw IllegalArgumentException(commands)
                     bkt += bkt[num]!! to j
                     bkt += j to bkt[num]!!
                 }
             }
         }
-        if (num != -1) throw IllegalArgumentException(commands)
+        if (num != 1) throw IllegalArgumentException(commands)
     }
 
     fun move(com: Char) {
