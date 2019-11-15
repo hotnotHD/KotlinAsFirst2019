@@ -297,12 +297,14 @@ fun fromRoman(roman: String): Int {
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (commands.contains(Regex("""[^+\-><\[\] ]"""))) throw IllegalArgumentException(commands)
+
     var comCount = 0
     var i = 0
     var sensor = cells / 2
     val line = mutableListOf<Int>()
     val bkt = mutableMapOf<Int, Int>()
     repeat(cells) { line.add(0) }
+    if (commands.isEmpty()) return line
 
     fun nextBkt() {
         var num = 0
