@@ -315,6 +315,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
                 }
                 ']' -> {
                     num--
+                    if (num < 0) throw IllegalArgumentException(commands)
                     bkt += bkt[num]!! to j
                     bkt += j to bkt[num]!!
                 }
