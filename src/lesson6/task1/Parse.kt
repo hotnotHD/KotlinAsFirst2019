@@ -297,7 +297,6 @@ fun fromRoman(roman: String): Int {
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (commands.contains(Regex("""[^+\-><\[\] ]"""))) throw IllegalArgumentException(commands)
-
     var comCount = 0
     var i = 0
     var sensor = cells / 2
