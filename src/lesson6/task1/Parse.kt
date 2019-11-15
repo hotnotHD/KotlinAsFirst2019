@@ -132,7 +132,9 @@ fun dateDigitToStr(digital: String): String = TODO()
  */
 fun flattenPhoneNumber(phone: String): String {
     val reg = Regex("""\s|[-()]""").replace(phone, "")
-    if (reg.contains(Regex("""[^0-9+]""")) || phone.contains(Regex("""\(\)"""))) return String()
+    if (reg.contains(Regex("""[^0-9+]|\++(?![0-9])""")) ||
+        phone.contains(Regex("""\(\)"""))
+    ) return String()
     return reg
 }
 
@@ -230,7 +232,32 @@ fun mostExpensive(description: String): String = TODO()
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+val romNum = mapOf(
+    "I" to 1,
+    "IV" to 4,
+    "V" to 5,
+    "IX" to 9,
+    "X" to 10,
+    "XL" to 40,
+    "L" to 50,
+    "XC" to 90,
+    "C" to 100,
+    "CD" to 400,
+    "D" to 500,
+    "CM" to 900,
+    "M" to 1000
+)
+
+fun fromRoman(roman: String): Int {
+    if (roman.isEmpty()) return -1
+    if (!roman.matches(Regex("""M{0,4}(CM|CD|D)?C{0,3}(XC|XL|L)?X{0,3}(IX|IV|V)?I{0,3}"""))) return -1
+    val romSplit = Regex("""CM|CD|IX|IV|XL|XC|[IVXLCDM]""").findAll(roman).toList().map { it.value }
+    var decInt = 0
+    for (i in romSplit) {
+        decInt += romNum[i]!!
+    }
+    return decInt
+}
 
 /**
  * Очень сложная
@@ -268,4 +295,51 @@ fun fromRoman(roman: String): Int = TODO()
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    if (commands.contains(Regex("""[^+\-><\[\] ]"""))) throw IllegalArgumentException(commands)
+    var comCount = 0
+    var i = 0
+    var sensor = cells / 2
+    val line = mutableListOf<Int>()
+    val bkt = mutableMapOf<Int, Int>()
+    repeat(cells) { line.add(0) }
+
+    fun nextBkt() {
+        var num = 0
+        for (j in 0 until commands.length) {
+            when (commands[j]) {
+                '[' -> {
+                    bkt += num to j
+                    num++
+                }
+                ']' -> {
+                    num--
+                    bkt += bkt[num]!! to j
+                    bkt += j to bkt[num]!!
+                }
+            }
+        }
+        if (num != 0) throw IllegalArgumentException(commands)
+    }
+
+    fun move(com: Char) {
+        when (com) {
+            '+' -> line[sensor]++
+            '>' -> sensor++
+            '-' -> line[sensor]--
+            '<' -> sensor--
+            '[' -> if (line[sensor] == 0) comCount = bkt[comCount]!!
+            ']' -> if (line[sensor] != 0) comCount = bkt[comCount]!!
+        }
+        i++
+        comCount++
+    }
+
+    nextBkt()
+    while (i < limit) {
+        move(commands[comCount])
+        if (sensor !in 0 until cells) throw IllegalStateException(commands)
+        if (comCount > commands.length - 1) break
+    }
+    return line
+}
