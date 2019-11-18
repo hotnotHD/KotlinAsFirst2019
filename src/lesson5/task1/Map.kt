@@ -293,8 +293,8 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> =
             indIskl.size >= 2 -> Pair(indIskl[0], indIskl[1])
             indList.size < 2 -> Pair(-1, -1)
             else -> {
-                val x = indList.values
-                Pair(x.first(), x.last())
+                val x = indList.keys.first()
+                Pair(indList[x]!!, indList[number - x]!!)
             }
         }
     }
