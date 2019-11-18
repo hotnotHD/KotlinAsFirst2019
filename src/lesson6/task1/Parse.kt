@@ -86,22 +86,16 @@ val monthStr = mapOf(
  * входными данными.
  */
 fun dateStrToDigit(str: String): String {
-    val fin = mutableListOf<String>()
     val parts = str.split(" ")
-    if (parts.size != 3) return String()
-    if (!str.matches(Regex("""\d+\s[а-я]+\s\d+"""))) return String()
-    for (i in 0 until parts.size) {
-        fin += when {
-            i == 1 -> monthStr[parts[i]] ?: return String()
-            (parts[i].toInt() in 0..9) && i != 2 -> "0${parts[i].toInt()}"
-            (i == 0 && parts[0].toInt() > 31) || daysInMonth(
-                monthStr[parts[1]]!!.toInt(),
-                parts[2].toInt()
-            ) < parts[0].toInt() -> return String()
-            else -> parts[i]
-        }
+    return if (parts.size != 3 || !str.matches(Regex("""\d+\s[а-я]+\s\d+"""))) String()
+    else {
+        val a = if (parts[0].toInt() >= 10) parts[0]
+        else "0${parts[0].toInt()}"
+        val b = monthStr[parts[1]] ?: return String()
+        val c = parts[2]
+        if ((a.toInt() > 31) || daysInMonth(b.toInt(), c.toInt()) < a.toInt()) String()
+        else "$a.$b.$c"
     }
-    return fin.joinToString(separator = ".")
 }
 
 /**
@@ -130,13 +124,9 @@ fun dateDigitToStr(digital: String): String = TODO()
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String {
-    val reg = Regex("""\s|[-()]""").replace(phone, "")
-    if (reg.contains(Regex("""[^0-9+]|\++(?![0-9])""")) ||
-        phone.contains(Regex("""\(\)"""))
-    ) return String()
-    return reg
-}
+fun flattenPhoneNumber(phone: String): String =
+    if (!phone.matches(Regex("""\+?(\(?[\s0-9-]+\)?)+"""))) String()
+    else Regex("""[\s-()]""").replace(phone, "")
 
 /**
  * Средняя
@@ -164,15 +154,11 @@ fun bestLongJump(jumps: String): Int =
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int {
-    if (!jumps.matches(Regex("""(([0-9]+)\s+[+%-]+|\s+)+""")) || !jumps.contains(Regex("""\+""")))
-        return -1
-    val res = Regex("""([0-9]+)\s((%)+\+|\+)""").findAll(jumps).toList().map { it.value }
-    val res2 = mutableListOf<Int>()
-    for (i in res)
-        res2 += Regex("""\s[+%]+""").replace(i, "").toInt()
-    return res2.max()!!
-}
+fun bestHighJump(jumps: String): Int =
+    if (!jumps.matches(Regex("""(([0-9]+)\s+[+%-]+|\s+)+""")) || !jumps.contains("+")) -1
+    else Regex("""[0-9]+\s+[%-]+(?!\+)|[%-]|\s""").replace(jumps, "")
+        .split("+").max()!!.toInt()
+
 
 /**
  * Сложная
@@ -183,19 +169,11 @@ fun bestHighJump(jumps: String): Int {
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int {
-    if (expression.matches(Regex("""[0-9]+"""))) return expression.toInt()
-    if (!expression.matches(Regex("""([0-9]+)(\s[+|-]\s[0-9]+)+"""))) throw IllegalArgumentException(expression)
-    val num = Regex("""([0-9]+)|[+|-]\s[0-9]+""").findAll(expression).toList().map { it.value }
-    var res = 0
-    for (i in num) {
-        if (i.contains("-"))
-            res -= Regex("""-\s""").replace(i, "").toInt()
-        else
-            res += Regex("""\+\s""").replace(i, "").toInt()
-    }
-    return res
-}
+fun plusMinus(expression: String): Int =
+    if (!expression.matches(Regex("""((?<![+])([0-9])+)((\s[+|-]\s[0-9]+)?)+""")))
+        throw IllegalArgumentException(expression)
+    else
+        Regex("""\s(?=[0-9])""").replace(expression, "").split(" ").sumBy { it.toInt() }
 
 /**
  * Сложная
