@@ -285,16 +285,18 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> =
     else {
         val indList = mutableMapOf<Int, Int>()
         val indIskl = mutableListOf<Int>()
+        val newMap = mutableMapOf<Int, Pair<Int, Int>>()
         list.forEachIndexed { k, it ->
+            newMap += it to Pair(k, number - it)
             if (it.toDouble() == number / 2.0) indIskl += k
-            else if (number - it in list && it !in indList.keys) indList += it to k
+            if (it == newMap[number - it]?.second && it != number - it) indList += k to newMap[number - it]!!.first
         }
         when {
             indIskl.size >= 2 -> Pair(indIskl[0], indIskl[1])
-            indList.size < 2 -> Pair(-1, -1)
+            indList.isEmpty() -> Pair(-1, -1)
             else -> {
                 val x = indList.keys.first()
-                Pair(indList[x]!!, indList[number - x]!!)
+                Pair(indList[x]!!, x).sorted()
             }
         }
     }

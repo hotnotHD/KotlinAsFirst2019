@@ -89,11 +89,12 @@ fun dateStrToDigit(str: String): String {
     val parts = str.split(" ")
     return if (parts.size != 3 || !str.matches(Regex("""\d+\s[а-я]+\s\d+"""))) String()
     else {
-        val a = if (parts[0].toInt() >= 10) parts[0]
-        else "0${parts[0].toInt()}"
+        val a1 = parts[0].toInt()
+        val a = if (a1 >= 10) parts[0]
+        else "0$a1"
         val b = monthStr[parts[1]] ?: return String()
-        val c = parts[2]
-        if ((a.toInt() > 31) || daysInMonth(b.toInt(), c.toInt()) < a.toInt()) String()
+        val c = parts[2].toInt()
+        if ((a1 > 31) || daysInMonth(b.toInt(), c) < a1) String()
         else "$a.$b.$c"
     }
 }
@@ -125,8 +126,7 @@ fun dateDigitToStr(digital: String): String = TODO()
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
 fun flattenPhoneNumber(phone: String): String =
-    if (phone.contains(Regex("""[^\s0-9-+]""")) ||
-        !phone.matches(Regex("""\+?(\(?[\s0-9-]+\)?)+"""))) String()
+    if (!phone.matches(Regex("""\+?(([\s0-9-])(\([\s0-9-]+\))?)+"""))) String()
     else Regex("""[\s-()]""").replace(phone, "")
 
 /**
@@ -157,7 +157,7 @@ fun bestLongJump(jumps: String): Int =
  */
 fun bestHighJump(jumps: String): Int =
     if (!jumps.matches(Regex("""(([0-9]+)\s+[+%-]+|\s+)+""")) || !jumps.contains("+")) -1
-    else Regex("""[0-9]+\s+[%-]+(?!\+)|[%-]|\s""").replace(jumps, "")
+    else Regex("""[0-9]+\s+[%-]+(?!\+)|[%\s-]""").replace(jumps, "")
         .split("+").max()!!.toInt()
 
 
@@ -171,7 +171,7 @@ fun bestHighJump(jumps: String): Int =
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int =
-    if (!expression.matches(Regex("""((?<![+])([0-9])+)((\s[+|-]\s[0-9]+)?)+""")))
+    if (!expression.matches(Regex("""(([0-9])+)((\s[+|-]\s[0-9]+)?)+""")))
         throw IllegalArgumentException(expression)
     else
         Regex("""\s(?=[0-9])""").replace(expression, "").split(" ").sumBy { it.toInt() }
