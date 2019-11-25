@@ -171,7 +171,7 @@ fun bestHighJump(jumps: String): Int =
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int =
-    if (!expression.matches(Regex("""(([0-9])+)((\s[+|-]\s[0-9]+)?)+""")))
+    if (!expression.matches(Regex("""(\s[+|-]\s|[0-9])+""")))
         throw IllegalArgumentException(expression)
     else
         Regex("""\s(?=[0-9])""").replace(expression, "").split(" ").sumBy { it.toInt() }
