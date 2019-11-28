@@ -143,17 +143,6 @@ Basic, Ruby, Swift.
 2)  Число  пробелов  между  более  левой  парой  соседних  слов  должно  быть  больше или равно числу пробелов
 между                более               правой               парой               соседних               слов."""
         )
-        File("temp.txt").delete()
-        alignFileByWidth("input/width_in2.txt", "temp.txt")
-        assertFileContent(
-            "temp.txt",
-            """ШЖББА,               аз              вТбз\n
-вбббнббв вбббнббв -- ВБББНББВ БН вБббНббв\n
-РЯ    ---   аз,   аз   -   ббБ   -   ВТБЗ\n"""
-        )
-        File("temp.txt").delete()
-
-
     }
 
     @Test

@@ -151,18 +151,18 @@ fun alignFileByWidth(inputName: String, outputName: String) {
 
     for (line in File(inputName).readLines()) {
         if (line.trim().length > maxLong) {
-            maxLong = line.trim().length
+            maxLong = line.trim().replace(Regex("""\\n"""), "").length
         }
         spaces += line.trim().split(Regex("""\s+""")).size - 1
     }
 
     for ((i, line) in File(inputName).readLines().withIndex()) {
         if (spaces[i] > 0) {
-            ostSpace = maxLong - line.replace(Regex("""\s+"""), " ").trim().length
+            ostSpace = maxLong - line.replace(Regex("""\s+|\\n"""), " ").trim().length
             everySpace = ostSpace / spaces[i]
             plusSpace = ostSpace - (everySpace * spaces[i])
         }
-        for ((j, word) in line.trim().split(" ").withIndex()) {
+        for ((j, word) in line.trim().split(Regex("""\s+""")).withIndex()) {
             k = if (j < plusSpace) 1
             else 0
             res.write(word)
