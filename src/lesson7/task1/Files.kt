@@ -150,16 +150,15 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     var k: Int
 
     for (line in File(inputName).readLines()) {
-        line.trim().replace(Regex("""\s"""), " ")
         if (line.trim().length > maxLong) {
             maxLong = line.trim().length
         }
-        spaces += line.trim().split(Regex("""\s""")).size - 1
+        spaces += line.trim().split(Regex("""\s+""")).size - 1
     }
 
     for ((i, line) in File(inputName).readLines().withIndex()) {
         if (spaces[i] > 0) {
-            ostSpace = maxLong - line.trim().length
+            ostSpace = maxLong - line.replace(Regex("""\s+"""), " ").trim().length
             everySpace = ostSpace / spaces[i]
             plusSpace = ostSpace - (everySpace * spaces[i])
         }
