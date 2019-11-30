@@ -3,7 +3,7 @@
 package lesson7.task1
 
 import java.io.File
-import javax.sound.sampled.Line
+import java.util.*
 
 /**
  * Пример
@@ -293,7 +293,6 @@ Vestibulum lobortis, ~~Est vehicula rutrum *suscipit*~~, ipsum ~~lib~~ero *place
 
 Suspendisse ~~et elit in enim tempus iaculis~~.
  *
- * Соответствующий выходной файл:
 <html>
 <body>
 <p>
@@ -309,7 +308,57 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val res = File(outputName).bufferedWriter()
+    val istack = Stack<Int>()
+
+    fun act(aword: Char): String {
+        var a = aword.toString()
+        val mapA = mapOf(
+            'i' to 1,
+            'b' to 2,
+            's' to 3
+        )
+        istack.pop()
+        if (istack.empty()) {
+            istack.push(mapA[aword])
+            return a
+        }
+        if (!istack.empty()) {
+            val peek = istack.peek()
+            when {
+                peek == 1 && a == "i" -> {
+                    a = "/i"
+                    istack.pop()
+                }
+                peek == 2 && a == "b" -> {
+                    a = "/b"
+                    istack.pop()
+                }
+                peek == 3 && a == "s" -> {
+                    a = "/s"
+                    istack.pop()
+                }
+                mapA[aword] != istack.peek() -> istack.push(mapA[aword])
+            }
+        }
+        return a
+    }
+
+    res.write("<html><body><p>")
+    for (line in File(inputName).readLines()) {
+        if (line.isEmpty()) res.write("</p><p>")
+        val repline = line.replace("***", "<b><i>").replace("~~", "<s>")
+            .replace("**", "<b>").replace("*", "<i>")
+        for (word in repline) {
+            if (word == '<') istack.push(0)
+            if (word.toString().contains(Regex("""[sbi]""")) && !istack.empty() && istack.peek() == 0)
+                res.write(act(word))
+            else res.write(word.toString())
+        }
+        res.newLine()
+    }
+    res.write("</p></body></html>")
+    res.close()
 }
 
 /**
