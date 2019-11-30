@@ -345,27 +345,28 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         return a
     }
 
-    res.write("<html><body><p>")
+    res.write("<html><body>")
     for (line in File(inputName).readLines()) {
-        if (line.isEmpty() && pstack.empty()) {
-            res.write("</p>")
-            pstack.push(0)
-        }
         val repline = line.replace("***", "<b><i>").replace("~~", "<s>")
             .replace("**", "<b>").replace("*", "<i>")
         for (word in repline) {
-            if (pstack.isNotEmpty()) {
+            if (pstack.isEmpty()) {
                 res.write("<p>")
-                pstack.pop()
+                pstack.push(0)
             }
             if (word == '<') istack.push(0)
             if (word.toString().contains(Regex("""[sbi]""")) && !istack.empty() && istack.peek() == 0)
                 res.write(act(word))
             else res.write(word.toString())
         }
+        if (line.isEmpty() && pstack.isNotEmpty()) {
+            res.write("</p>")
+            pstack.pop()
+        }
         res.newLine()
     }
-    res.write("</p></body></html>")
+    if (pstack.isNotEmpty()) res.write("</p>")
+    res.write("</body></html>")
     res.close()
 }
 
