@@ -310,6 +310,7 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val res = File(outputName).bufferedWriter()
     val istack = Stack<Int>()
+    val pstack = Stack<Int>()
 
     fun act(aword: Char): String {
         var a = aword.toString()
@@ -346,7 +347,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 
     res.write("<html><body><p>")
     for (line in File(inputName).readLines()) {
-        if (line.isEmpty()) res.write("</p><p>")
+        if (line.isEmpty() && pstack.empty()) {
+            res.write("</p><p>")
+            pstack.push(0)
+        }
+        if (line.isNotEmpty() && pstack.isNotEmpty()) pstack.pop()
         val repline = line.replace("***", "<b><i>").replace("~~", "<s>")
             .replace("**", "<b>").replace("*", "<i>")
         for (word in repline) {

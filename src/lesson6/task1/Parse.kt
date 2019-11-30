@@ -87,13 +87,13 @@ val monthStr = mapOf(
  */
 fun dateStrToDigit(str: String): String {
     val parts = str.split(" ")
-    if (parts.size != 3 || !str.matches(Regex("""\d+\s[а-я]+\s\d+"""))) return String()
+    if (parts.size != 3 || !str.matches(Regex("""\d+\s[а-я]+\s\d+"""))) return ""
     val a1 = parts[0].toInt()
     val a = if (a1 >= 10) parts[0]
     else "0$a1"
-    val b = monthStr[parts[1]] ?: return String()
+    val b = monthStr[parts[1]] ?: return ""
     val c = parts[2].toInt()
-    return if ((a1 > 31) || daysInMonth(b.toInt(), c) < a1) String()
+    return if ((a1 > 31) || daysInMonth(b.toInt(), c) < a1) ""
     else "$a.$b.$c"
 
 }
@@ -124,10 +124,10 @@ fun dateDigitToStr(digital: String): String = TODO()
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String {
-    if (!phone.matches(Regex("""\+?(([\s0-9-])(\([\s0-9-]+\))?)+"""))) return String()
-    return Regex("""[\s-()]""").replace(phone, "")
-}
+fun flattenPhoneNumber(phone: String): String =
+    if (!phone.matches(Regex("""\+?(([\s0-9-])(\([\s0-9-]+\))?)+"""))) ""
+    else Regex("""[\s-()]""").replace(phone, "")
+
 
 /**
  * Средняя
