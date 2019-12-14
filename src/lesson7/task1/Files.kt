@@ -56,12 +56,12 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
     val res = mutableMapOf<String, Int>()
-    for (i in substrings) {
+    for (i in substrings.groupBy { it }.keys) {
         res += mapOf(i to 0)
     }
     for (line in File(inputName).readLines()) {
         val lines = line.toLowerCase()
-        for (i in 0 until substrings.size) {
+        for (i in 0 until res.size) {
             val sub = substrings[i]
             val g = res[sub]
             val window = lines.windowed(size = sub.length, step = 1).toString()
@@ -155,7 +155,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
         var plusSpace = 0
         var ostSpace: Int
         if (spaces[i] > 0) {
-            ostSpace = maxLong - line.replace(Regex("""\s+|\\n"""), " ").trim().length
+            ostSpace = maxLong - line.replace(Regex("""\s+"""), " ").trim().length
             everySpace = ostSpace / spaces[i]
             plusSpace = ostSpace - (everySpace * spaces[i])
         }
@@ -343,11 +343,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     for (line in File(inputName).readLines()) {
         val repline = line.replace("***", "<b><i>").replace("~~", "<s>")
             .replace("**", "<b>").replace("*", "<i>")
+        if (pstack.isEmpty()) {
+            res.write("<p>")
+            pstack.push(0)
+        }
         for (word in repline) {
-            if (pstack.isEmpty()) {
-                res.write("<p>")
-                pstack.push(0)
-            }
             if (word == '<') istack.push(0)
             if (word.toString().contains(Regex("""[sbi]""")) && !istack.empty() && istack.peek() == 0)
                 res.write(act(word))
