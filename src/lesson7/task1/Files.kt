@@ -56,16 +56,17 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
     val res = mutableMapOf<String, Int>()
-    for (i in substrings.groupBy { it }.keys) {
+    val sub = substrings.groupBy { it }.keys.toList()
+    for (i in sub) {
         res += mapOf(i to 0)
     }
     for (line in File(inputName).readLines()) {
         val lines = line.toLowerCase()
         for (i in 0 until res.size) {
-            val sub = substrings[i]
-            val g = res[sub]
-            val window = lines.windowed(size = sub.length, step = 1).toString()
-            res[sub] = g!! + window.split(sub.toLowerCase()).size - 1
+            val subc = sub[i]
+            val g = res[subc]
+            val window = lines.windowed(size = subc.length, step = 1).toString()
+            res[subc] = g!! + window.split(subc.toLowerCase()).size - 1
         }
     }
     return res
@@ -340,24 +341,30 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     }
 
     res.write("<html><body>")
+    var k = 0
     for (line in File(inputName).readLines()) {
         val repline = line.replace("***", "<b><i>").replace("~~", "<s>")
             .replace("**", "<b>").replace("*", "<i>")
-        if (pstack.isEmpty()) {
-            res.write("<p>")
-            pstack.push(0)
-        }
         for (word in repline) {
+            if (pstack.isEmpty()) {
+                res.write("<p>")
+                pstack.push(0)
+            }
             if (word == '<') istack.push(0)
             if (word.toString().contains(Regex("""[sbi]""")) && !istack.empty() && istack.peek() == 0)
                 res.write(act(word))
             else res.write(word.toString())
+            k = 1
         }
         if (line.isEmpty() && pstack.isNotEmpty()) {
             res.write("</p>")
             pstack.pop()
         }
         res.newLine()
+    }
+    if (k == 0) {
+        res.write("<p>")
+        pstack.push(0)
     }
     if (pstack.isNotEmpty()) res.write("</p>")
     res.write("</body></html>")
