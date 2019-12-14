@@ -55,21 +55,18 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  *
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
-    val counts = mutableListOf<Int>()
-    val size = substrings.size
-    repeat(size) {
-        counts += 0
-    }
     val res = mutableMapOf<String, Int>()
-    var window: String
-    for (line in File(inputName).readLines()) {
-        for (i in 0 until size) {
-            window = line.windowed(size = substrings[i].length, step = 1).toString().toLowerCase()
-            counts[i] += window.split(substrings[i].toLowerCase()).size - 1
-        }
+    for (i in substrings) {
+        res += mapOf(i to 0)
     }
-    for (i in 0 until counts.size) {
-        res += mapOf(substrings[i] to counts[i])
+    for (line in File(inputName).readLines()) {
+        val lines = line.toLowerCase()
+        for (i in 0 until substrings.size) {
+            val sub = substrings[i]
+            val g = res[sub]
+            val window = lines.windowed(size = sub.length, step = 1).toString()
+            res[sub] = g!! + window.split(sub.toLowerCase()).size - 1
+        }
     }
     return res
 }
@@ -144,32 +141,29 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     val res = File(outputName).bufferedWriter()
     var maxLong = 0
     val spaces = mutableListOf<Int>()
-    var everySpace = 0
-    var plusSpace = 0
-    var ostSpace: Int
-    var k: Int
-
     for (line in File(inputName).readLines()) {
-        if (line.trim().length > maxLong) {
-            maxLong = line.trim().replace(Regex("""\\n"""), "").length
+        val trim = line.trim()
+        val trimL = trim.length
+        if (trimL > maxLong) {
+            maxLong = trimL
         }
-        spaces += line.trim().split(Regex("""\s+""")).size - 1
+        spaces += trim.split(Regex("""\s+""")).size - 1
     }
 
     for ((i, line) in File(inputName).readLines().withIndex()) {
+        var everySpace = 0
+        var plusSpace = 0
+        var ostSpace: Int
         if (spaces[i] > 0) {
             ostSpace = maxLong - line.replace(Regex("""\s+|\\n"""), " ").trim().length
             everySpace = ostSpace / spaces[i]
             plusSpace = ostSpace - (everySpace * spaces[i])
         }
         for ((j, word) in line.trim().split(Regex("""\s+""")).withIndex()) {
-            k = if (j < plusSpace) 1
+            val k: Int = if (j < plusSpace) 1
             else 0
             res.write(word)
-            if (j < spaces[i])
-                repeat(everySpace + 1 + k) {
-                    res.write(" ")
-                }
+            if (j < spaces[i]) res.write(" ".repeat(everySpace + 1 + k))
         }
         res.newLine()
     }
