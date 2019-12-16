@@ -153,7 +153,6 @@ fun alignFileByWidth(inputName: String, outputName: String) {
         list += trim.replace(Regex("""\s+"""), " ").length
         spaces += trim.split(Regex("""\s+""")).size - 1
     }
-
     for ((i, line) in ggg.withIndex()) {
         var everySpace = 0
         var plusSpace = 0
