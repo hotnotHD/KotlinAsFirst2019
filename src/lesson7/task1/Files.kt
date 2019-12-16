@@ -142,21 +142,24 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     val res = File(outputName).bufferedWriter()
     var maxLong = 0
     val spaces = mutableListOf<Int>()
-    for (line in File(inputName).readLines()) {
+    val ggg = File(inputName).readLines()
+    val list = mutableListOf<Int>()
+    for (line in ggg) {
         val trim = line.trim()
         val trimL = trim.length
         if (trimL > maxLong) {
             maxLong = trimL
         }
+        list += trim.replace(Regex("""\s+"""), " ").length
         spaces += trim.split(Regex("""\s+""")).size - 1
     }
 
-    for ((i, line) in File(inputName).readLines().withIndex()) {
+    for ((i, line) in ggg.withIndex()) {
         var everySpace = 0
         var plusSpace = 0
         var ostSpace: Int
         if (spaces[i] > 0) {
-            ostSpace = maxLong - line.replace(Regex("""\s+"""), " ").trim().length
+            ostSpace = maxLong - list[i]
             everySpace = ostSpace / spaces[i]
             plusSpace = ostSpace - (everySpace * spaces[i])
         }
@@ -170,6 +173,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     }
     res.close()
 }
+
 
 /**
  * Средняя
