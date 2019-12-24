@@ -69,6 +69,7 @@ fun square(notation: String): Square {
  */
 fun rookMoveNumber(start: Square, end: Square): Int =
     when {
+        !start.inside() || !end.inside() -> throw IllegalArgumentException()
         start.column == end.column && start.row == end.row -> 0
         start.row == end.row || start.column == end.column -> 1
         else -> 2
@@ -132,6 +133,7 @@ fun rookTrajectory(start: Square, end: Square): List<Square> {
  */
 fun bishopMoveNumber(start: Square, end: Square): Int =
     when {
+        !start.inside() || !end.inside() -> throw IllegalArgumentException()
         (start.row + start.column) % 2 != (end.row + end.column) % 2 -> -1
         start.row == end.row && start.column == end.column -> 0
         abs(start.column - end.column) == abs(start.row - end.row) -> 1
@@ -166,8 +168,8 @@ fun doubleEdgedSword(start: Square, end: Square): Square {
             row++
         }
         if (!Square(column, row).inside()) {
-            row = start.row + abs(row - end.row)
-            column = start.column - abs(column - end.column)
+            row = start.row + (end.row - row)
+            column = start.column - (column - end.column)
         }
         Square(column, row)
     } else {
@@ -176,8 +178,8 @@ fun doubleEdgedSword(start: Square, end: Square): Square {
             row--
         }
         if (!Square(column, row).inside()) {
-            row = start.row - abs(row - end.row)
-            column = start.column + abs(column - end.column)
+            row = start.row - (end.row - row)
+            column = start.column + (column - end.column)
         }
         Square(column, row)
     }
