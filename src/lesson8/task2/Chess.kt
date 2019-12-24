@@ -162,27 +162,22 @@ fun bishopMoveNumber(start: Square, end: Square): Int =
 fun doubleEdgedSword(start: Square, end: Square): Square {
     var row = start.row
     var column = start.column
-    return if (end.row + end.column > start.row + start.column) {
+    if (end.row + end.column > start.row + start.column) {
         while (abs(end.column - column) != abs(end.row - row)) {
             column++
             row++
         }
-        if (!Square(column, row).inside()) {
-            row = start.row + (end.row - row)
-            column = start.column - (column - end.column)
-        }
-        Square(column, row)
     } else {
         while (abs(end.column - column) != abs(end.row - row)) {
             column--
             row--
         }
-        if (!Square(column, row).inside()) {
-            row = start.row - (end.row - row)
-            column = start.column + (column - end.column)
-        }
-        Square(column, row)
     }
+    if (!Square(column, row).inside()) {
+        row = start.row + (end.row - row)
+        column = start.column - (column - end.column)
+    }
+    return Square(column, row)
 }
 
 fun bishopTrajectory(start: Square, end: Square): List<Square> {
