@@ -141,32 +141,30 @@ fun centerFile(inputName: String, outputName: String) {
 fun alignFileByWidth(inputName: String, outputName: String) {
     val res = File(outputName).bufferedWriter()
     var maxLong = 0
-    val spaces = mutableListOf<Int>()
-    val ggg = File(inputName).readLines()
-    val list = mutableListOf<Int>()
-    for (line in ggg) {
+    val file = File(inputName).readLines().toMutableList()
+    for ((i, line) in file.withIndex()) {
         val trim = line.trim()
         val trimL = trim.length
         if (trimL > maxLong) {
             maxLong = trimL
         }
-        list += trim.replace(Regex("""\s+"""), " ").length
-        spaces += trim.split(Regex("""\s+""")).size - 1
+        file[i] = trim.replace(Regex("""\s+"""), " ")
     }
-    for ((i, line) in ggg.withIndex()) {
+    for (line in file) {
+        val lvlUpLine = line.split(Regex("""\s"""))
+        val spaces = lvlUpLine.size - 1
         var everySpace = 0
         var plusSpace = 0
-        var ostSpace: Int
-        if (spaces[i] > 0) {
-            ostSpace = maxLong - list[i]
-            everySpace = ostSpace / spaces[i]
-            plusSpace = ostSpace - (everySpace * spaces[i])
+        if (spaces > 0) {
+            val ostSpace = maxLong - line.length
+            everySpace = ostSpace / spaces
+            plusSpace = ostSpace - (everySpace * spaces)
         }
-        for ((j, word) in line.trim().split(Regex("""\s+""")).withIndex()) {
+        for ((j, word) in lvlUpLine.withIndex()) {
             val k: Int = if (j < plusSpace) 1
             else 0
             res.write(word)
-            if (j < spaces[i]) res.write(" ".repeat(everySpace + 1 + k))
+            if (j < spaces) res.write(" ".repeat(everySpace + 1 + k))
         }
         res.newLine()
     }
