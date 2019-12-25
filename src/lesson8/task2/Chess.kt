@@ -162,13 +162,11 @@ fun bishopMoveNumber(start: Square, end: Square): Int =
 fun doubleEdgedSword(start: Square, end: Square): Square {
     var row = start.row
     var column = start.column
-    if (end.row + end.column > start.row + start.column) {
-        while (abs(end.column - column) != abs(end.row - row)) {
+    while (abs(end.column - column) != abs(end.row - row)) {
+        if (end.row + end.column > start.row + start.column) {
             column++
             row++
-        }
-    } else {
-        while (abs(end.column - column) != abs(end.row - row)) {
+        } else {
             column--
             row--
         }
@@ -217,7 +215,21 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> {
  * Пример: kingMoveNumber(Square(3, 1), Square(6, 3)) = 3.
  * Король может последовательно пройти через клетки (4, 2) и (5, 2) к клетке (6, 3).
  */
-fun kingMoveNumber(start: Square, end: Square): Int = TODO()
+fun kingMoveNumber(start: Square, end: Square): Int {
+    if (!start.inside() || !end.inside()) throw IllegalArgumentException()
+    if (start.row == end.row && start.column == end.column) return 0
+    var count = 0
+    var row = abs(end.row - start.row)
+    var column = abs(end.column - start.column)
+    while (row > 1 && column > 1) {
+        row--
+        column--
+        count++
+    }
+    count = if (row <= 1) count + column
+    else count + row
+    return count
+}
 
 /**
  * Сложная
@@ -233,7 +245,23 @@ fun kingMoveNumber(start: Square, end: Square): Int = TODO()
  *          kingTrajectory(Square(3, 5), Square(6, 2)) = listOf(Square(3, 5), Square(4, 4), Square(5, 3), Square(6, 2))
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun kingTrajectory(start: Square, end: Square): List<Square> = TODO()
+fun kingTrajectory(start: Square, end: Square): List<Square> {
+    val moves = mutableListOf(start)
+    if (kingMoveNumber(start, end) == 0) return moves
+    val needMoves = kingMoveNumber(start, end)
+    val znakRow = if (end.row > start.row) 1
+    else -1
+    val znakColumn = if (end.column > start.column) 1
+    else -1
+    var row = start.row
+    var column = start.column
+    for (i in 0 until needMoves) {
+        if (row != end.row) row += znakRow
+        if (column != end.column) column += znakColumn
+        moves += Square(column, row)
+    }
+    return moves
+}
 
 /**
  * Сложная
