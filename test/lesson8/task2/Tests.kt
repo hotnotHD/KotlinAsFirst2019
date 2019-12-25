@@ -118,6 +118,7 @@ class Tests {
         assertEquals(6, kingMoveNumber(square("a8"), square("g8")))
         assertEquals(7, kingMoveNumber(square("a1"), square("h8")))
         assertThrows(IllegalArgumentException::class.java) { square("h9"); square("h9") }
+        assertEquals(1, kingMoveNumber(square("h8"), square("h7")))
     }
 
     private fun List<Square>.assertKingTrajectory(start: Square, end: Square, length: Int) {

@@ -221,14 +221,12 @@ fun kingMoveNumber(start: Square, end: Square): Int {
     var count = 0
     var row = abs(end.row - start.row)
     var column = abs(end.column - start.column)
-    while (row > 1 && column > 1) {
+    while (row > 0 && column > 0) {
         row--
         column--
         count++
     }
-    count = if (row <= 1) count + column
-    else count + row
-    return count
+    return count + row + column
 }
 
 /**
